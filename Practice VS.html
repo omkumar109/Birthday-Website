@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Cutie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #ffb6c1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .gift {
+      font-size: 80px;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    h1 {
+      color: white;
+      margin-top: 20px;
+      z-index: 2;
+    }
+
+    #nameInputScreen, #greetingScreen, #thankYouScreen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff4d6d;
+      animation: fall linear infinite;
+      font-size: 20px;
+      opacity: 0.8;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .note {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.5rem;
+      color: #fff8f0;
+      text-align: center;
+      margin-top: 30px;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    }
+
+    #surpriseBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background: #ff69b4;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 2s;
+    }
+  </style>
+</head>
+<body>
+  <div class="gift" onclick="openGift()">🎁</div>
+  <h1>Open the gift Cutie</h1>
+
+  <div id="nameInputScreen">
+    <h2>What is your beautiful name?</h2>
+    <input type="text" id="nameInput" placeholder="Enter your name" />
+  </div>
+
+  <div id="greetingScreen">
+    <audio autoplay loop>
+      <source src="Materials/Dholna.mp3" type="audio/mp3">
+    </audio>
+    <h2 id="typedText"></h2>
+    <img src="Materials/Final Cake.png" alt="Cake" width="200" style="margin-top:20px;" />
+    <div id="finalNote" class="note">
+      <p>Dear Cutie,<br>
+      Tumhari muskaan sabse pyaari hai 😍<br>
+      You deserve all the love and joy in the world. Happy Birthday! 🎂💖</p>
+    </div>
+    <button id="surpriseBtn" onclick="showSurprise()">🎁 Tap to open your surprise</button>
+  </div>
+
+  <div id="thankYouScreen">
+    <h1>🎉 Thank You for the Love! 🎉</h1>
+    <p>Wanna wish back? 👉 <a href="https://wa.me/919770825433" target="_blank">Send a message</a></p>
+    <img src="c:\Users\om kumar\Desktop\1shika.webp" alt="Surprise Image" width="250" style="margin-top: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);" />
+  </div>
+
+  <div class="hearts-container"></div>
+
+  <script>
+    const gift = document.querySelector(".gift");
+    const nameInputScreen = document.getElementById("nameInputScreen");
+    const greetingScreen = document.getElementById("greetingScreen");
+    const thankYouScreen = document.getElementById("thankYouScreen");
+    const typedText = document.getElementById("typedText");
+    const finalNote = document.getElementById("finalNote");
+    const surpriseBtn = document.getElementById("surpriseBtn");
+
+    function openGift() {
+      gift.style.display = "none";
+      document.querySelector("h1").style.display = "none";
+      nameInputScreen.style.display = "flex";
+    }
+
+    document.body.addEventListener("click", function(e) {
+      if (nameInputScreen.style.display === "none" && gift.style.display !== "none") {
+        openGift();
+      }
+    });
+
+    document.getElementById("nameInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        showGreeting();
+      }
+    });
+
+    function showGreeting() {
+      const name = document.getElementById("nameInput").value;
+      if (!name.trim()) return;
+      nameInputScreen.style.display = "none";
+      greetingScreen.style.display = "flex";
+
+      let message = `Happy Birthday, ${name}! You are special 💖`;
+      let i = 0;
+      function typeWriter() {
+        if (i < message.length) {
+          typedText.innerHTML += message.charAt(i);
+          i++;
+          setTimeout(typeWriter, 100);
+        }
+      }
+      typeWriter();
+
+      setTimeout(() => {
+        finalNote.style.opacity = 1;
+        surpriseBtn.style.opacity = 1;
+        startFallingHearts();
+      }, 4000);
+    }
+
+    function startFallingHearts() {
+      const container = document.querySelector(".hearts-container");
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = 2 + Math.random() * 3 + "s";
+        heart.innerText = Math.random() > 0.5 ? "❤️" : "💕";
+        container.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }, 300);
+    }
+
+    function showSurprise() {
+      greetingScreen.style.display = "none";
+      thankYouScreen.style.display = "flex";
+    }
+  </script>
+</body>
+</html>
